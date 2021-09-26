@@ -112,7 +112,6 @@ class Info(commands.Cog):
         elif my_stats['win'] == False:
           game_comment = lose_strings[random.randint(0, len(lose_strings) - 1)]
         
-        await ctx.send(participants[1])
         return await ctx.send(f"Last game you played {my_stats['champion']} with a score of {my_stats['kills']}/{my_stats['deaths']}/{my_stats['assists']}. {game_comment}.")
 
     @commands.command()
