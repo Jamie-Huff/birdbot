@@ -1,10 +1,10 @@
-Thanks for checking out birdbot :)
+# Thanks for checking out birdbot :)
 
-Birdbot is a discord bot that references riot api to provide helpful features to users.
+birdbot is a discord bot that references riot api to provide helpful features to users.
 
-** NOTE: THIS BOT IS IN PROGRESS AND DOES NOT HAVE FULL FUNCTIONALITY **
+# ** NOTE: THIS BOT IS IN PROGRESS AND DOES NOT HAVE FULL FUNCTIONALITY **
 
-How to get started with birdbot:
+# How to get started with birdbot
 1. head to: https://developer.riotgames.com/
 2. Sign in to your riot account, and generate a new development API Key
   ** NOTE: DO NOT SHARE THIS WITH ANYONE. ITS FOR YOU AND YOU ALONE **
@@ -27,9 +27,9 @@ How to get started with birdbot:
 
 
 
-some features available from birdbot:
+# birdbot Commands
 
-  !stats:
+##  !stats:
     Provide a users ranked stats. Input: !stats player_name_string
 
       example input: "!stats nice rat"
@@ -40,14 +40,14 @@ some features available from birdbot:
                           Losses: 170 
                           Winrate: 54.5%
 
-  !game:
+##  !game:
     Provides insights about the users most recent game. Input: !game player_name_string
 
       example input: "!game nice rat"
 
       example output: TO BE DETERMINED
 
-  !champ:
+##  !champ:
     Provides a list of all your champions abilities. Input: !champ champ_name_string
 
       example input: "!champ anivia"
@@ -66,7 +66,7 @@ some features available from birdbot:
 
                           Ultimate Ability -- Glacial Storm: Anivia summons a driving rain of ice and hail to damage her enemies and slow their advance.
 
-  !tips:
+##  !tips:
     Provides some helpful tips if you are new to a champion. Input: !tips champ_name_string
 
       example input: "!tips anivia"
@@ -79,8 +79,8 @@ some features available from birdbot:
 
                           It can be very difficult for enemy champions to kill her egg early in game. Seize the advantage by playing aggressively.
 
-  ** FOR DEVELOPERS **
-  !user:
+###  ** FOR DEVELOPERS **
+##  !user:
     Provides the required information to get queries on a specific user. Input: !user name_string
 
       example input: "!user nice rat"
