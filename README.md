@@ -8,7 +8,11 @@ How to get started with birdbot:
 1. head to: https://developer.riotgames.com/
 2. Sign in to your riot account, and generate a new development API Key
   ** NOTE: DO NOT SHARE THIS WITH ANYONE. ITS FOR YOU AND YOU ALONE **
-  the format should look like : RGAPI-11a1a1a1-aa11-11aa-111a-1aa1111a1aa1 with your own unique values.
+  the format should look like :
+       
+        ``RGAPI-11a1a1a1-aa11-11aa-111a-1aa1111a1aa1 with your own unique values.``
+
+
 3. replace the api_key variable at the top of main.py with your unique key
 4. Head to https://replit.com/ , make an account, and create a new replit
 5. Copy and paste the code into replit and click run to start the program.
