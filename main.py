@@ -9,8 +9,7 @@ from riotwatcher import LolWatcher, ApiError
 from pprint import pprint
 #useful https://towardsdatascience.com/how-to-use-riot-api-with-python-b93be82dbbd6
 
-# Needs riotAPI api_key from https://developer.riotgames.com/
-api_key = 'RGAPI-******'
+api_key = 'RGAPI-*******************'
 watcher = LolWatcher(api_key)
 my_region = 'na1'
 
@@ -29,13 +28,6 @@ def id_to_champ_name(champ_id):
  # !counter
  # !runes
  # !build
-phrases = []
-with open("phrases.csv") as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    for row in csv_reader:
-        phrases.append(row[1])
-
-
 class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -46,7 +38,6 @@ class Info(commands.Cog):
 
         if ctx.voice_client is not None:
             return await ctx.voice_client.move_to(channel)
-
         await channel.connect()
 
 
@@ -72,18 +63,21 @@ class Info(commands.Cog):
         my_matches = watcher.match.matchlist_by_account(my_region, me['accountId'])
         last_match = my_matches['matches'][0]
         match_detail = watcher.match.by_id(my_region, last_match['gameId'])
-        # I can use this to vie all of the indivdual keys from my result
         matchkeys = list(match_detail.keys())
-        print(matchkeys)
-        # pprint(match_detail['participants'][0]['championName'])
-        pprint(watcher.data_dragon.versions_for_region('na1')['v'])
-        # pprint(watcher.data_dragon.champions())
-    # i need to add the users information to this
-    # for example each users id or puuid
+
+        participant_names = []
+        for row in match_detail['participantIdentities']:
+          participant_names.append(row['player']['summonerName'])
+
+        counter = 0
         participants = []
+        team1 = []
+        team2 = []
         for row in match_detail['participants']:
             participants_row = {}
             participants_row['champion'] = id_to_champ_name(row['championId'])
+            participants_row['player_id'] = row['participantId']
+            participants_row['name'] = participant_names[counter]
             participants_row['spell1'] = row['spell1Id']
             participants_row['spell2'] = row['spell2Id']
             participants_row['win'] = row['stats']['win']
@@ -96,11 +90,30 @@ class Info(commands.Cog):
             participants_row['totalMinionsKilled'] = row['stats']['totalMinionsKilled']
             participants_row['item0'] = row['stats']['item0']
             participants_row['item1'] = row['stats']['item1']
+            if counter >= 5:
+              team1.append(participants_row['name'])
+            elif counter >= 10 and counter < 5:
+              team2.append(participants_row['name'])
+            counter += 1
             participants.append(participants_row)
-        # df = pd.DataFrame(participants)
-        # df
-        pprint(participants)
-        return await ctx.send(participants[0])
+
+        my_stats = []
+        for row in participants:
+          if row['name'].lower() == name.lower():
+            my_stats = row
+
+        # can change these strings for custom win / loss messages
+        win_strings = ['You won the game, good job', 'You conqoured the other teams booties, nice', 'Your team showed the enemies who the real chad was. Nice']
+        lose_strings = ['You lost that one, loser idiot head', 'Your team got stomped', 'Not even Justin could of carried that one, another loss for the books', 'You probably had Dalton on your team, feels bad']
+
+        #pprint(participants)
+        if my_stats['win'] == True:
+          game_comment = win_strings[random.randint(0, len(win_strings) - 1)]
+        elif my_stats['win'] == False:
+          game_comment = lose_strings[random.randint(0, len(lose_strings) - 1)]
+        
+        await ctx.send(participants[1])
+        return await ctx.send(f"Last game you played {my_stats['champion']} with a score of {my_stats['kills']}/{my_stats['deaths']}/{my_stats['assists']}. {game_comment}.")
 
     @commands.command()
     async def runes(self, ctx, *message):
@@ -115,19 +128,12 @@ class Info(commands.Cog):
 
         winrate = round(((my_ranked_stats['wins'] / (my_ranked_stats['wins'] + my_ranked_stats['losses'])) * 100), 1)
 
-        # winrate = wins / wins + losses
         return await ctx.send(f"Ranked stats for {name}: \n   Rank: {my_ranked_stats['tier']} {my_ranked_stats['rank']}: {my_ranked_stats['leaguePoints']}LP \n   Wins: {my_ranked_stats['wins']} \n   Losses: {my_ranked_stats['losses']} \n   Winrate: {winrate}% ")
 
-    # @commands.command()
-    # async def thought(self, ctx):
-    #     response = phrases[random.randint(0, len(phrases) - 1)]
-    #     return await ctx.send(response)
 
-#when ever someone uses the ! before a message in the chat, 
-#the program looks for a function that follows the text after it.
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or("!"),
-    description='A leauge of legends discord bot'
+    description='Relatively simple music bot example'
 )
 
 
@@ -136,6 +142,6 @@ async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
 
-
 bot.add_cog(Info(bot))
-bot.run()
+bot.run(my_secret)
+
