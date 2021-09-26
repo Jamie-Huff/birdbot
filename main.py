@@ -7,6 +7,7 @@ import pandas as pd
 import riotwatcher as riotwatcher
 from riotwatcher import LolWatcher, ApiError
 from pprint import pprint
+import requests
 #useful https://towardsdatascience.com/how-to-use-riot-api-with-python-b93be82dbbd6
 
 api_key = 'RGAPI-*******************'
@@ -128,6 +129,63 @@ class Info(commands.Cog):
         winrate = round(((my_ranked_stats['wins'] / (my_ranked_stats['wins'] + my_ranked_stats['losses'])) * 100), 1)
 
         return await ctx.send(f"Ranked stats for {name}: \n   Rank: {my_ranked_stats['tier']} {my_ranked_stats['rank']}: {my_ranked_stats['leaguePoints']}LP \n   Wins: {my_ranked_stats['wins']} \n   Losses: {my_ranked_stats['losses']} \n   Winrate: {winrate}% ")
+    
+    @commands.command()
+    async def tips(self, ctx, *message):
+      champ_syntaxed = []
+      for split_champion_name in message:
+        string = split_champion_name.capitalize()
+        champ_syntaxed.append(string)
+      
+      champ_syntaxed = ''.join(champ_syntaxed)
+      r = requests.get(f'http://ddragon.leagueoflegends.com/cdn/11.19.1/data/en_US/champion/{champ_syntaxed}.json')
+
+      try: 
+        r.raise_for_status()
+      except requests.exceptions.HTTPError:
+          return await ctx.send(f"ERROR Champion: {champ_syntaxed}, does not exist. Are you sure you are spelling it right?")
+
+      champ_info = r.json()
+      champ_tips = champ_info['data'][champ_syntaxed]['allytips']
+      tips_string = ''
+      for tip in champ_tips:
+        tips_string = tips_string + tip + '\n\n'
+      return await ctx.send(tips_string)
+
+    @commands.command()
+    async def champ(self, ctx, *message):
+      champ_syntaxed = []
+      for split_champion_name in message:
+        string = split_champion_name.capitalize()
+        champ_syntaxed.append(string)
+      
+      champ_syntaxed = ''.join(champ_syntaxed)
+
+      r = requests.get(f'http://ddragon.leagueoflegends.com/cdn/11.19.1/data/en_US/champion/{champ_syntaxed}.json')
+
+      try: 
+        r.raise_for_status()
+      except requests.exceptions.HTTPError:
+          return await ctx.send(f"ERROR Champion: {champ_syntaxed}, does not exist. Are you sure you are spelling it right?")
+
+      champ_info = r.json()
+      pprint(champ_info['data'][champ_syntaxed])
+
+      blurb = champ_info['data'][champ_syntaxed]['blurb']
+      passive_desc = champ_info['data'][champ_syntaxed]['passive']['description']
+      passive_name = champ_info['data'][champ_syntaxed]['passive']['name']
+      q_desc = champ_info['data'][champ_syntaxed]['spells'][0]['description']
+      q_name = champ_info['data'][champ_syntaxed]['spells'][0]['name']
+      w_desc = champ_info['data'][champ_syntaxed]['spells'][1]['description']
+      w_name = champ_info['data'][champ_syntaxed]['spells'][1]['name']
+      e_desc = champ_info['data'][champ_syntaxed]['spells'][2]['description']
+      e_name = champ_info['data'][champ_syntaxed]['spells'][2]['name']
+      r_desc = champ_info['data'][champ_syntaxed]['spells'][3]['description']
+      r_name = champ_info['data'][champ_syntaxed]['spells'][3]['name']
+      champ_tips = champ_info['data'][champ_syntaxed]['allytips']
+      counter_tips = champ_info['data'][champ_syntaxed]['enemytips']
+
+      return await ctx.send(f"Champion: {champ_syntaxed}\n\nPassive -- {passive_name}: {passive_desc}\n\nQ Ability -- {q_name}: {q_desc}\n\nW Ability -- {w_name}: {w_desc}\n\nE Ability -- {e_name}: {e_desc}\n\nUltimate Ability -- {r_name}: {r_desc}")
 
 
 bot = commands.Bot(
