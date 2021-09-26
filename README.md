@@ -37,7 +37,7 @@ some features available from birdbot:
                           Winrate: 54.5%
 
   !game:
-    Provides insights about the users current game. Input: !game name_string
+    Provides insights about the users most recent game. Input: !game name_string
 
       example input: "!game nice rat"
 
