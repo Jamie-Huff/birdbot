@@ -26,7 +26,7 @@ How to get started with birdbot:
 some features available from birdbot:
 
   !stats:
-    Provide a users ranked stats. Input: !stats name_string
+    Provide a users ranked stats. Input: !stats player_name_string
 
       example input: "!stats nice rat"
 
@@ -37,11 +37,43 @@ some features available from birdbot:
                           Winrate: 54.5%
 
   !game:
-    Provides insights about the users most recent game. Input: !game name_string
+    Provides insights about the users most recent game. Input: !game player_name_string
 
       example input: "!game nice rat"
 
       example output: TO BE DETERMINED
+
+  !champ:
+    Provides a list of all your champions abilities. Input: !champ champ_name_string
+
+      example input: "!champ anivia"
+
+      example output: 
+      
+          Champion: Anivia
+
+                          Passive -- Rebirth: Upon taking fatal damage, Anivia reverts to an egg and is reborn with full health.
+
+                          Q Ability -- Flash Frost: Anivia brings her wings together and summons a sphere of ice that flies towards her opponents, chilling and damaging anyone in its path. When the sphere explodes it does moderate damage in a radius, stunning anyone in the area.
+
+                          W Ability -- Crystallize: Anivia condenses the moisture in the air into an impassable wall of ice to block all movement. The wall only lasts a short duration before it melts.
+
+                          E Ability -- Frostbite: With a flap of her wings, Anivia blasts a freezing gust of wind at her target, dealing damage. If the target was recently hit by Flash Frost or damaged by a fully formed Glacial Storm, the damage they take is doubled.
+
+                          Ultimate Ability -- Glacial Storm: Anivia summons a driving rain of ice and hail to damage her enemies and slow their advance.
+
+  !tips:
+    Provides some helpful tips if you are new to a champion. Input: !tips champ_name_string
+
+      example input: "!tips anivia"
+
+      exampple output:
+
+                          Timing Flash Frost with Frostbite can lead to devastating combinations.
+
+                          Anivia is extremely reliant on Mana for Glacial Storm. Try getting items with Mana or going for a Crest of the Ancient Golem buff on Summoner's Rift.
+
+                          It can be very difficult for enemy champions to kill her egg early in game. Seize the advantage by playing aggressively.
 
   ** FOR DEVELOPERS **
   !user:
